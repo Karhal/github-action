@@ -12,27 +12,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set environment variables
-      id: set-env
-      run: |
-        echo "ISSUE_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-        echo "ISSUE_TITLE=${{ github.event.issue.title }}" >> $GITHUB_ENV
-        echo "ISSUE_BODY=${{ github.event.issue.body }}" >> $GITHUB_ENV
-        echo "ISSUE_ASSIGNEES=$(echo ${{ join(github.event.issue.assignees.*.login, ', ') }})" >> $GITHUB_ENV
-        echo "ISSUE_LABELS=$(echo ${{ join(github.event.issue.labels.*.name, ', ') }})" >> $GITHUB_ENV
-
-    - name: Display issue information
-      run: |
-        echo "Issue Number: $ISSUE_NUMBER"
-        echo "Issue Title: $ISSUE_TITLE"
-        echo "Issue Body: $ISSUE_BODY"
-        echo "Issue Assignees: $ISSUE_ASSIGNEES"
-        echo "Issue Labels: $ISSUE_LABELS"
-
-    - name: Retrieve and display issue details via GitHub API
-      run: |
-        ISSUE_RESPONSE=$(curl -s https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER)
-        echo "Issue Information from API: $ISSUE_RESPONSE"
+    - name: Print Issue Information
       env:
-        ISSUE_NUMBER: ${{ env.ISSUE_NUMBER }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       ISSUE_NUMBER: ${{ github.event.issue.number }}
+       ISSUE_TITLE: ${{ github.event.issue.title }}
+       ISSUE_BODY: ${{ github.event.issue.body }}
+       ISSUE_ASSIGNEES: $(echo ${{ join(github.event.issue.assignees.*.login, ', ') }})
+       ISSUE_LABELS: $(echo ${{ join(github.event.issue.labels.*.name, ', ') }})
+      run: |
+          echo "Issue Number: ${ISSUE_NUMBER}"
+          echo "Issue Body: ${ISSUE_BODY}'
+          echo "Issue Assignees: ${ISSUE_ASSIGNEES}"
+          echo "Issue Labels: ${ISSUE_LABELS}"

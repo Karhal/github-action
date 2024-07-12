@@ -1,0 +1,21 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Access Issue Information
+
+on:
+  issues:
+    types: [created, reopened]
+
+jobs:
+  access_issue_info:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print Issue Information
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          ISSUE_RESPONSE=$(curl -s https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER)
+          echo "Issue Information: $ISSUE_RESPONSE"
+
